@@ -16,8 +16,6 @@ WORKDIR /app/src
 COPY . .
 RUN go build -o /app/bin/main main.go
 
-RUN rm -r /app/src/
-
 WORKDIR /app/bin
 
 COPY .env .
