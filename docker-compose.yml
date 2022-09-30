@@ -1,0 +1,7 @@
+version: "3"
+
+services:
+  yori:
+    build: .
+    ports:
+      - "${SERVER_PORT}:${SERVER_PORT}"
