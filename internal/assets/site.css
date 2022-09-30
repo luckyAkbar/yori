@@ -1,3 +1,7 @@
+body {
+    background-color: black;
+}
+
 #customers {
   font-family: Arial, Helvetica, sans-serif;
   border-collapse: collapse;

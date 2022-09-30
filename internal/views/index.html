@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/assets/site.css"> 
+    <title>Ini Judul</title>
+
+    <style>
+        h2 {
+            text-align: center;
+        }
+
+        body {
+            margin: auto;
+            width: 50%;
+            border: 3px solid transparent;
+            padding: 10px;
+        }
+
+        form {
+            margin: auto;
+            width: 50%;
+            border: 3px solid green;
+            padding: 10px;
+        }
+
+        #customers {
+            max-width: 50%;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+
+<h2>RO Sales Checking</h2>
+
+<form>
+  <label for="ktp">Nomor KK:</label><br>
+  <input type="text" id="kk" name="kk" value=""><br>
+  <button type="button" id="submitBtnKK">Find By KK</button>
+</form>
+
+<br><br>
+
+<form>
+  <label for="ktp">Nomor KTP:</label><br>
+  <input type="text" id="ktp" name="ktp" value=""><br>
+  <button type="button" id="submitBtnKTP">Find By KTP</button>
+</form>
+
+<br><br>
+
+<div id="tableResult">
+    <table id="customers">
+        <tr>
+            <th>STATUS</th>
+        </tr>
+    </table>
+</div>
+
+<script>
+    const submitBtnKK = document.getElementById("submitBtnKK");
+    const submitBtnKTP = document.getElementById("submitBtnKTP");
+    const table = document.getElementById("customers");
+    
+    submitBtnKK.addEventListener("click", async (event) => {
+        event.preventDefault();
+        const kk = document.getElementById("kk").value;
+
+        while (table.lastElementChild) {
+            if (table.children.length === 1) break;
+            table.removeChild(table.lastElementChild);
+        }
+
+        if (!kk) {
+            alert("mohon isi nilai di dalam form terlebih dahulu");
+            return;
+        }
+
+        const res = await fetch(`/index/find/kk/${kk}`)
+
+        const tr = document.createElement('tr');
+        const td = document.createElement('td');
+        tr.appendChild(td);
+        table.appendChild(tr);
+
+        const data = await res.json()
+        if (res.status === 200 && data.length > 0)  td.innerText = "RO SALES (By KK)";
+        else td.innerText = "BUKAN RO SALES (By KK)";
+
+    })
+
+    submitBtnKTP.addEventListener("click", async (event) => {
+        event.preventDefault();
+        const ktp = document.getElementById("ktp").value;
+
+        while (table.lastElementChild) {
+            if (table.children.length === 1) break;
+            table.removeChild(table.lastElementChild);
+        }
+
+        if (!ktp) {
+            alert("mohon isi nilai di dalam form terlebih dahulu");
+            return;
+        }
+
+        const res = await fetch(`/index/find/ktp/${ktp}`)
+
+        const tr = document.createElement('tr');
+        const td = document.createElement('td');
+        tr.appendChild(td);
+        table.appendChild(tr);
+
+        const data = await res.json()
+        if (res.status === 200 && data.length > 0) td.innerText = "RO SALES (By KTP)";
+        else td.innerText = "BUKAN RO SALES (By KTP)";
+    });
+</script>
+
+</body>
+</html>
