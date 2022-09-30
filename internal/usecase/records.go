@@ -30,3 +30,16 @@ func (u *recordUsecase) FindByKTP(ctx context.Context, ktp string) (*model.Recor
 		return record, nil
 	}
 }
+
+func (u *recordUsecase) FindByKK(ctx context.Context, kk string) (*model.Record, error) {
+	record, err := u.repo.FindByKK(ctx, kk)
+	switch err {
+	default:
+		log.Println("error:", err)
+		return nil, ErrInternal
+	case repository.ErrNotFound:
+		return nil, ErrNotFound
+	case nil:
+		return record, nil
+	}
+}

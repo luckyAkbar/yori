@@ -31,3 +31,17 @@ func (r *recordRepository) FindByKTP(ctx context.Context, ktp string) (*model.Re
 		return record, nil
 	}
 }
+
+func (r *recordRepository) FindByKK(ctx context.Context, kk string) (*model.Record, error) {
+	record := &model.Record{}
+	err := r.db.WithContext(ctx).Model(&model.Record{}).Where("kk = ?", kk).Take(record).Error
+	switch err {
+	default:
+		log.Println("error:", err)
+		return nil, err
+	case gorm.ErrRecordNotFound:
+		return nil, ErrNotFound
+	case nil:
+		return record, nil
+	}
+}

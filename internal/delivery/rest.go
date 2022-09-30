@@ -25,6 +25,7 @@ func InitService(recordUsecase model.RecordUsecase, group *echo.Group) {
 
 func (s *Service) initRoutes() {
 	s.group.GET("/find/ktp/:ktp/", s.handleFindByKtp())
+	s.group.GET("/find/kk/:kk/", s.handleFindByKK())
 }
 
 func (s *Service) handleFindByKtp() echo.HandlerFunc {
@@ -35,6 +36,25 @@ func (s *Service) handleFindByKtp() echo.HandlerFunc {
 		}
 
 		record, err := s.recordUsecase.FindByKTP(c.Request().Context(), ktp)
+		switch err {
+		default:
+			return ErrInternal
+		case usecase.ErrNotFound:
+			return ErrNotFound
+		case nil:
+			return c.JSON(http.StatusOK, record)
+		}
+	}
+}
+
+func (s *Service) handleFindByKK() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		kk := c.Param("kk")
+		if kk == "" {
+			return ErrBadRequest
+		}
+
+		record, err := s.recordUsecase.FindByKK(c.Request().Context(), kk)
 		switch err {
 		default:
 			return ErrInternal
