@@ -35,7 +35,8 @@
     const submitBtn = document.getElementById("submitBtn");
     const table = document.getElementById("customers");
     
-    submitBtn.addEventListener("click", async () => {
+   submitBtn.addEventListener("click", async (event) => {
+        event.preventDefault();
         const kk = document.getElementById("kk").value;
 
         while (table.lastElementChild) {
