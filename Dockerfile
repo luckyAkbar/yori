@@ -18,6 +18,7 @@ RUN go build -o /app/bin/main main.go
 
 WORKDIR /app/bin
 
+COPY internal .
 COPY .env .
 
 CMD ["./main", "server"]
