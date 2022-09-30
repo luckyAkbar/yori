@@ -20,7 +20,9 @@ RUN rm -r /app/src/
 
 WORKDIR /app/bin
 
-COPY internal .
+RUN mkdir internal
+
+COPY internal ./internal
 COPY .env .
 
 CMD ["./main", "server"]
