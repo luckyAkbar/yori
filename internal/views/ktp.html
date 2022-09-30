@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/assets/site.css"> 
+</head>
+<body>
+
+<h2>Search By KTP</h2>
+
+<form>
+  <label for="ktp">Nomor KTP:</label><br>
+  <input type="text" id="ktp" name="ktp" value=""><br>
+  <button type="button" id="submitBtn">Submit</button>
+</form>
+
+<div id="tableResult">
+    <table id="customers">
+        <tr>
+            <th>No</th>
+            <th>Nama</th>
+            <th>No Engine</th>
+            <th>Tgl Mohon Faktur</th>
+            <th>Fincoy</th>
+            <th>Type</th>
+            <th>KTP</th>
+            <th>KK</th>
+            <th>Dealer</th>
+            <th>Bulan</th>
+            <th>Tahun</th>
+        </tr>
+    </table>
+</div>
+
+<script>
+    const submitBtn = document.getElementById("submitBtn");
+    const table = document.getElementById("customers");
+    
+    submitBtn.addEventListener("click", async () => {
+        const ktp = document.getElementById("ktp").value;
+
+        while (table.lastElementChild) {
+            if (table.children.length === 1) break;
+            table.removeChild(table.lastElementChild);
+        }
+
+        if (!ktp) {
+            alert("mohon isi nilai di dalam form terlebih dahulu");
+            return;
+        }
+
+        const res = await fetch(`/index/find/ktp/${ktp}`)
+        if (res.status !== 200) {
+            alert(`terjadi error dari server: ${res.statusText}`)
+            return
+        }
+
+        const data = await res.json()
+        for (let i = 0; i < data.length; i++) {
+            const tr = document.createElement('tr');
+
+            Object.keys(data[i]).forEach((key, index) => {
+                const td = document.createElement('td');
+                td.innerText = data[i][key];
+
+                tr.appendChild(td);
+            });
+
+            table.appendChild(tr)
+        }
+    })
+</script>
+
+</body>
+</html>

@@ -43,7 +43,9 @@ func InitServer(_ *cobra.Command, _ []string) {
 	HTTPServer.Pre(middleware.AddTrailingSlash())
 	HTTPServer.Use(middleware.Logger())
 
-	RESTGroup := HTTPServer.Group("rest")
+	HTTPServer.Static("/assets/", "internal/assets")
+
+	RESTGroup := HTTPServer.Group("index")
 
 	delivery.InitService(recordUsecase, RESTGroup)
 
