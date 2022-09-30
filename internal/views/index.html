@@ -14,7 +14,6 @@
             width: 50%;
             border: 3px solid transparent;
             padding: 10px;
-            background-color: white;
         }
 
         form {
@@ -36,16 +35,16 @@
 
 <form>
   <label for="ktp">Nomor KK:</label><br>
-  <input type="text" id="kk" name="kk" value=""><br>
-  <button type="button" id="submitBtnKK">Find By KK</button>
+  <input type="text" id="kk" name="kk" value="" placeholder="masukan nomor KK"><br>
+  <button type="button" id="submitBtnKK">Cari Berdasarkan KK</button>
 </form>
 
 <br><br>
 
 <form>
   <label for="ktp">Nomor KTP:</label><br>
-  <input type="text" id="ktp" name="ktp" value=""><br>
-  <button type="button" id="submitBtnKTP">Find By KTP</button>
+  <input type="text" id="ktp" name="ktp" value="" placeholder="masukan nomor KTP"><br>
+  <button type="button" id="submitBtnKTP">Cari Berdasarkan KTP</button>
 </form>
 
 <br><br>
@@ -56,6 +55,21 @@
             <th>STATUS</th>
         </tr>
     </table>
+</div>
+
+<br><br>
+
+<div>
+    <h2>Petunjuk Penggunaan Aplikasi</h2>
+    <p>Untuk melakukan pengecekan konsumen RO sales Honda adalah sebagai berikut: </p>
+    <ol>
+        <li>Pada aplikasi terdapat dua buah box berisi form input dan juga tombol yang terbagi menjadi dua, yaitu pengecekan RO berdasarkan Nomor KK dan juga berdasarkan Nomor KTP</li>
+        <li>Untuk melakukan pengecekan RO sales berdasarkan nomor KK, maka inputkan nomor KK ke dalam form input khusus KK, dan kemudian klik tombol <strong>Cari Berdasarkan KK</strong></li>
+        <li>Sedangkan, untuk mencari berdasarkan nomor KTP, hal yang dilakukan adalah sama, namun inputkan nomor KTP ke dalam form khusus monor KTP dan kemudian klik tombol <strong>Cari Berdasarkan KTP</strong></li>
+        <li>Setelah anda menekan tombol, baik <strong>Cari Berdasarkan KK</strong> ataupun <strong>Cari Berdasarkan KTP</strong> maka akan ada output dibawah label <strong>STATUS</strong>.</li>
+        <li>Output yang dihasilkan adalah <strong>RO SALES (By KK)</strong> bila konsumen adalah RO sales ketika dicari berdasarkan KK, atau <strong>RO SALES (By KTP)</strong> jika konsumen adalah RO sales ketika dicari berdasarkan KTP</li>
+        <li>Namun bila output yang dihasilkan adalah <strong>BUKAN RO SALES (By KK)</strong> atau <strong>BUKAN RO SALES (By KTP)</strong> maka konsumen tersebut bukanlah RO sales Honda</li>
+    </ol>
 </div>
 
 <script>
@@ -85,8 +99,8 @@
         table.appendChild(tr);
 
         const data = await res.json()
-        if (res.status === 200 && data.length > 0)  td.innerText = "RO SALES (By KK)";
-        else td.innerText = "BUKAN RO SALES (By KK)";
+        if (res.status === 200 && data.length > 0)  td.innerHTML = "<strong>RO SALES (By KK)</strong>";
+        else td.innerHTML = "<strong>BUKAN RO SALES (By KK)</strong>";
 
     })
 
@@ -112,8 +126,8 @@
         table.appendChild(tr);
 
         const data = await res.json()
-        if (res.status === 200 && data.length > 0) td.innerText = "RO SALES (By KTP)";
-        else td.innerText = "BUKAN RO SALES (By KTP)";
+        if (res.status === 200 && data.length > 0) td.innerHTML = "<strong>RO SALES (By KTP)</strong>";
+        else td.innerHTML = "<strong>BUKAN RO SALES (By KTP)</strong>";
     });
 </script>
 
