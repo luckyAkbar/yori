@@ -16,17 +16,7 @@
 <div id="tableResult">
     <table id="customers">
         <tr>
-            <th>No</th>
-            <th>Nama</th>
-            <th>No Engine</th>
-            <th>Tgl Mohon Faktur</th>
-            <th>Fincoy</th>
-            <th>Type</th>
-            <th>KTP</th>
-            <th>KK</th>
-            <th>Dealer</th>
-            <th>Bulan</th>
-            <th>Tahun</th>
+            <th>STATUS</th>
         </tr>
     </table>
 </div>
@@ -35,7 +25,7 @@
     const submitBtn = document.getElementById("submitBtn");
     const table = document.getElementById("customers");
     
-   submitBtn.addEventListener("click", async (event) => {
+    submitBtn.addEventListener("click", async (event) => {
         event.preventDefault();
         const kk = document.getElementById("kk").value;
 
@@ -50,24 +40,16 @@
         }
 
         const res = await fetch(`/index/find/kk/${kk}`)
-        if (res.status !== 200) {
-            alert(`terjadi error dari server: ${res.statusText}`)
-            return
-        }
+
+        const tr = document.createElement('tr');
+        const td = document.createElement('td');
+        tr.appendChild(td);
+        table.appendChild(tr);
 
         const data = await res.json()
-        for (let i = 0; i < data.length; i++) {
-            const tr = document.createElement('tr');
+        if (res.status === 200 && data.length > 0)  td.innerText = "RO SALES";
+        else td.innerText = "BUKAN RO SALES";
 
-            Object.keys(data[i]).forEach((key, index) => {
-                const td = document.createElement('td');
-                td.innerText = data[i][key];
-
-                tr.appendChild(td);
-            });
-
-            table.appendChild(tr)
-        }
     })
 </script>
 
