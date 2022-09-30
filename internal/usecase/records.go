@@ -18,7 +18,7 @@ func NewRecordUsecase(repo model.RecordRepository) model.RecordUsecase {
 	}
 }
 
-func (u *recordUsecase) FindByKTP(ctx context.Context, ktp string) (*model.Record, error) {
+func (u *recordUsecase) FindByKTP(ctx context.Context, ktp string) ([]model.Record, error) {
 	record, err := u.repo.FindByKTP(ctx, ktp)
 	switch err {
 	default:
@@ -31,7 +31,7 @@ func (u *recordUsecase) FindByKTP(ctx context.Context, ktp string) (*model.Recor
 	}
 }
 
-func (u *recordUsecase) FindByKK(ctx context.Context, kk string) (*model.Record, error) {
+func (u *recordUsecase) FindByKK(ctx context.Context, kk string) ([]model.Record, error) {
 	record, err := u.repo.FindByKK(ctx, kk)
 	switch err {
 	default:

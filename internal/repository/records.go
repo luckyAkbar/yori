@@ -18,9 +18,9 @@ func NewRecordRepository(db *gorm.DB) model.RecordRepository {
 	}
 }
 
-func (r *recordRepository) FindByKTP(ctx context.Context, ktp string) (*model.Record, error) {
-	record := &model.Record{}
-	err := r.db.WithContext(ctx).Model(&model.Record{}).Where("ktp = ?", ktp).Take(record).Error
+func (r *recordRepository) FindByKTP(ctx context.Context, ktp string) ([]model.Record, error) {
+	record := []model.Record{}
+	err := r.db.WithContext(ctx).Model(&model.Record{}).Where("ktp = ?", ktp).Find(&record).Error
 	switch err {
 	default:
 		log.Println("error:", err)
@@ -32,9 +32,9 @@ func (r *recordRepository) FindByKTP(ctx context.Context, ktp string) (*model.Re
 	}
 }
 
-func (r *recordRepository) FindByKK(ctx context.Context, kk string) (*model.Record, error) {
-	record := &model.Record{}
-	err := r.db.WithContext(ctx).Model(&model.Record{}).Where("kk = ?", kk).Take(record).Error
+func (r *recordRepository) FindByKK(ctx context.Context, kk string) ([]model.Record, error) {
+	record := []model.Record{}
+	err := r.db.WithContext(ctx).Model(&model.Record{}).Where("kk = ?", kk).Find(&record).Error
 	switch err {
 	default:
 		log.Println("error:", err)

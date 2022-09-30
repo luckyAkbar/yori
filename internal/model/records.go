@@ -17,11 +17,11 @@ type Record struct {
 }
 
 type RecordUsecase interface {
-	FindByKTP(ctx context.Context, ktp string) (*Record, error)
-	FindByKK(ctx context.Context, kk string) (*Record, error)
+	FindByKTP(ctx context.Context, ktp string) ([]Record, error)
+	FindByKK(ctx context.Context, kk string) ([]Record, error)
 }
 
 type RecordRepository interface {
-	FindByKTP(ctx context.Context, ktp string) (*Record, error)
-	FindByKK(ctx context.Context, kk string) (*Record, error)
+	FindByKTP(ctx context.Context, ktp string) ([]Record, error)
+	FindByKK(ctx context.Context, kk string) ([]Record, error)
 }
