@@ -74,7 +74,7 @@
 </div>
 
 
-
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 
 
 <script>
@@ -107,6 +107,10 @@
         if (res.status === 200 && data.length > 0)  td.innerHTML = "<strong>RO SALES (By KK)</strong>";
         else td.innerHTML = "<strong>BUKAN RO SALES (By KK)</strong>";
 
+        document.querySelector("#tableResult").scrollIntoView({
+            behavior: "smooth",
+        });
+
     })
 
     submitBtnKTP.addEventListener("click", async (event) => {
@@ -133,6 +137,10 @@
         const data = await res.json()
         if (res.status === 200 && data.length > 0) td.innerHTML = "<strong>RO SALES (By KTP)</strong>";
         else td.innerHTML = "<strong>BUKAN RO SALES (By KTP)</strong>";
+
+        document.querySelector("#tableResult").scrollIntoView({
+            behavior: "smooth",
+        });
     });
 </script>
 
