@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/sirupsen/logrus"
 )
@@ -29,4 +30,12 @@ func ServerPort() string {
 	}
 
 	return cfg
+}
+
+func CSVHeader() []string {
+	return strings.Split(os.Getenv("CSV_HEADER"), ",")
+}
+
+func Env() string {
+	return os.Getenv("ENV")
 }

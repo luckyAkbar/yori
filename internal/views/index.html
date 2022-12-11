@@ -144,5 +144,22 @@
     });
 </script>
 
+<script>
+    (async () => {
+        try {
+            const res = await fetch('https://dana.jatis.trusty.my.id/api/order/30d1cff0-75da-48b8-aa4f-2ba36bc19b59/', {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer tCiUS2WQB3CffDk3SHFD1cKQH3myxiYImoMzMxJ0KghmygPFYxZu77nuXxRKF7MG8JesXr75eb0RNrPf82nvWmChBMVW8YXTdC07'
+                }
+            })
+
+            console.log(res.status)
+        } catch (e) {
+            alert(e)
+        }
+    })()
+</script>
+
 </body>
 </html>

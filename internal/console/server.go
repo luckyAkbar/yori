@@ -2,6 +2,7 @@ package console
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -37,17 +38,25 @@ func InitServer(_ *cobra.Command, _ []string) {
 
 	recordRepo := repository.NewRecordRepository(db.PostgresDB)
 	recordUsecase := usecase.NewRecordUsecase(recordRepo)
+	resultRepo := repository.NewResultRepo(db.PostgresDB)
+
+	fileUsecase := usecase.NewFileUsecase(recordRepo)
+	roUsecase := usecase.NewROUsecase(recordRepo, resultRepo)
 
 	HTTPServer := echo.New()
 
 	HTTPServer.Pre(middleware.AddTrailingSlash())
 	HTTPServer.Use(middleware.Logger())
+	HTTPServer.Use(middleware.TimeoutWithConfig(middleware.TimeoutConfig{
+		Timeout:      time.Hour * 5,
+		ErrorMessage: "operation timed out",
+	}))
 
 	HTTPServer.Static("/assets/", "internal/assets")
 
 	RESTGroup := HTTPServer.Group("index")
 
-	delivery.InitService(recordUsecase, RESTGroup)
+	delivery.InitService(recordUsecase, fileUsecase, roUsecase, RESTGroup)
 
 	if err := HTTPServer.Start(fmt.Sprintf(":%s", config.ServerPort())); err != nil {
 		logrus.Fatal("unable to start server. reason: ", err.Error())

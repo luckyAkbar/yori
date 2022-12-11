@@ -3,11 +3,33 @@ module github.com/luckyAkbar/yori
 go 1.18
 
 require (
+	github.com/banzaicloud/logrus-runtime-formatter v0.0.0-20190729070250-5ae5475bae5e
+	github.com/kumparan/go-lib v1.3.1
+	github.com/kumparan/go-utils v1.27.0
 	github.com/labstack/echo/v4 v4.9.0
+	github.com/rubenv/sql-migrate v1.2.0
 	github.com/sirupsen/logrus v1.9.0
 	github.com/spf13/cobra v1.5.0
 	gorm.io/driver/postgres v1.3.10
 	gorm.io/gorm v1.23.10
+)
+
+require (
+	github.com/aymerick/douceur v0.2.0 // indirect
+	github.com/cockroachdb/apd v1.1.0 // indirect
+	github.com/getsentry/sentry-go v0.11.0 // indirect
+	github.com/go-gorp/gorp/v3 v3.0.2 // indirect
+	github.com/gocarina/gocsv v0.0.0-20221105105431-c8ef78125b99 // indirect
+	github.com/goodsign/monday v1.0.0 // indirect
+	github.com/gorilla/css v1.0.0 // indirect
+	github.com/graph-gophers/graphql-go v1.4.0 // indirect
+	github.com/leekchan/accounting v0.3.1 // indirect
+	github.com/microcosm-cc/bluemonday v1.0.19 // indirect
+	github.com/oklog/ulid v1.3.1 // indirect
+	github.com/pkg/errors v0.8.1 // indirect
+	github.com/robfig/cron/v3 v3.0.1 // indirect
+	github.com/shopspring/decimal v1.2.0 // indirect
+	google.golang.org/grpc v1.38.0 // indirect
 )
 
 require (

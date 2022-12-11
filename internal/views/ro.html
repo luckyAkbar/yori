@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            body {
+                max-width: 60%;
+                margin: auto;
+            }
+
+            table {
+                font-family: arial, sans-serif;
+                border-collapse: collapse;
+                width: 100%;
+            }
+            td, th {
+                border: 1px solid #dddddd;
+                text-align: left;
+                padding: 8px;
+            }
+
+            tr:nth-child(even) {
+                background-color: #dddddd;
+            }
+        </style>
+    </head>
+<body>
+
+<h2>Formulir RO Checking</h2>
+
+<form>
+  <label for="tipe_ro">Tipe RO: (pilih salah satu)</label><br>
+  <input type="radio" id="tipe_ro" name="tipe_ro" value="all" checked>RO Semua Dealer
+  <input type="radio" id="tipe_ro" name="tipe_ro" value="exclusive">RO Dealer Tertentu
+  <br><br>
+  <label for="nama_dealer">Nama Dealer: (Jika memilih RO Dealer Tertentu saja)</label><br>
+  <input type="text" id="nama_dealer" name="nama_dealer">
+  <button id="dealerChecker">Cek Apakah Data Dealer ada</button>
+  <br><br>
+  <label for="periode_base">Pilih periode Base untuk penentuan RO</label><br>
+  Tanggal Awal <input type="date" id="periode_base_awal"><br>
+  Tanggal Akhir <input type="date" id="periode_base_akhir"><br>
+  <br>
+  <label for="periode_base">Pilih periode Pembanding untuk penentuan RO</label><br>
+  Tanggal Awal <input type="date" id="periode_pembanding_awal"><br>
+  Tanggal Akhir <input type="date" id="periode_pembanding_akhir"><br>
+  <br><br>
+  <input id="submit" type="submit" value="Submit">
+</form> 
+
+<p>Silahkan klik submit jika sudah selesai. Hasil RO checking akan keluar pada table di bawah</p>
+<br><br>
+<h3>Hasil RO checking akan tersedia pada ID di bawah ini. Untuk melihat hasilnya, kunjungi https://yori.trusty.my.id/index/ro/result dan masukan ID tersebut di field pencarian</h3>
+
+<table id="roTable">
+  <tr>
+    <th>ID</th>
+  </tr>
+</table>
+<br><br><br><br><br><br>
+</body>
+
+    <script>
+        const table = document.getElementById('roTable');
+        const submitBtn = document.getElementById("submit");
+        submitBtn.addEventListener('click', async(e) => {
+            e.preventDefault();
+
+            document.body.style.cursor = 'wait';
+
+            const tipeRO = document.querySelector('input[name="tipe_ro"]:checked').value;
+            const dealerName = document.getElementById('nama_dealer').value;
+            
+            const baseStart = document.querySelector('#periode_base_awal').value;
+            if (!baseStart) {
+                alert('Mohon pilih Tanggal Awal periode base terlebih dahulu')
+                return
+            }
+
+            const baseFinish = document.querySelector('#periode_base_akhir').value;
+            if (!baseFinish) {
+                alert('Mohon pilih Tanggal Akhir periode base terlebih dahulu')
+                return
+            }
+
+            const compareStart = document.querySelector('#periode_pembanding_awal').value;
+            if (!compareStart) {
+                alert('Mohon pilih Tanggal Awal periode pembanding terlebih dahulu')
+                return
+            }
+
+            const compareFinish = document.querySelector('#periode_pembanding_akhir').value;
+            if (!compareFinish) {
+                alert('Mohon pilih Tanggal Akhir periode pembanding terlebih dahulu')
+                return
+            }
+
+            const baseStartDate = new Date(baseStart)
+            const baseFinishDate = new Date(baseFinish)
+            const compareStartDate = new Date(compareStart)
+            const compareFinishDate = new Date(compareFinish)
+
+            if (baseStartDate > baseFinishDate) {
+                alert('Tanggal Base Awal tidak boleh melewati dari Tanggal Base Akhir')
+                return
+            }
+
+            if (compareStartDate > compareFinishDate) {
+                alert('Tanggal Pembanding Awal tidak boleh melewati dari Tanggal Pembanding Akhir')
+                return
+            }
+
+            if (baseFinishDate > compareStartDate) {
+                alert('Maaf, periode base dan pembanding tidak boleh overlapping')
+                return
+            }
+
+            try {
+                const res = await fetch('/index/ro/check/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        tipe_ro: tipeRO,
+                        base_start: baseStartDate,
+                        base_finish: baseFinishDate,
+                        compare_start: compareStartDate,
+                        compare_finish: compareFinishDate,
+                    })
+                });
+
+                if (res.status !== 200) {
+                    throw new Error(res.status);
+                }
+
+                const data = await res.json()
+                
+                alert('Permintaan sedang di proses server. Silahkan simpan link di table di bawah, dan secara berkala kunjungi link itu untuk melihat hasilnya.')
+                console.log(data)
+
+                // if (res.status === 404) {
+                //     alert('Maaf, tidak ditemukan data pembeli yang tergolong RO')
+                //     return
+                // }
+
+                // if (res.status === 500) {
+                //     alert('aplikasi error. Segera hubungi developer untuk perbaikan')
+                //     return
+                // }
+
+                // if (res.status === 503) {
+                //     alert('Server terlalu lama meresponse. Mungkin proses terlalu berat. Mohon hubungi developer')
+                //     return
+                // }
+
+                while (table.lastElementChild) {
+                    if (table.children.length === 1) break;
+                    table.removeChild(table.lastElementChild);
+                }
+
+                const tr = document.createElement('tr')
+                const td = document.createElement('td')
+
+                td.innerText = data.id
+
+                tr.appendChild(td)
+                table.appendChild(tr)
+
+                // const data = await res.json()
+                // console.log(data)
+                // if (data.result.length === 0) {
+                //     alert('Server mengembalikan 0 data. Maaf, tidak ditemukan data pembeli yang tergolong RO')
+                //     return
+                // }
+
+                // for (let i = 0; i < data.length; i++) {
+                //     const tr = document.createElement('tr')
+
+                //     const ktp = document.createElement('td')
+                //     ktp.innerText = data[i].ktp
+
+                //     const pembayaran = document.createElement('td')
+                //     pembayaran.innerText = data[i].payments.toString();
+
+                //     const dealer = document.createElement('td')
+                //     dealer.innerText = data[i].dealers.toString();
+
+                //     const jumlahOrder = document.createElement('td')
+                //     jumlahOrder.innerText = data[i].num_orders.toString();
+
+                //     tr.appendChild(ktp)
+                //     tr.appendChild(dealer)
+                //     tr.appendChild(pembayaran)
+                //     tr.appendChild(jumlahOrder)
+
+                //     table.appendChild(tr)
+                // }
+
+                
+            } catch (e) {
+                console.log(e);
+                alert('maaf aplikasi terjadi error. Mohon hubungi developer')
+            } finally {
+                document.body.style.cursor = 'default';
+            }
+        })
+
+        const cekDealerBtn = document.getElementById("dealerChecker")
+        cekDealerBtn.addEventListener('click', async(e) => {
+            e.preventDefault();
+
+            const tipeRO = document.querySelector('input[name="tipe_ro"]:checked').value;
+            if (tipeRO === 'all') {
+                alert('tidak bisa melakukan menu ini jika memilih RO Semua Dealer')
+                return
+            }
+
+            const name = document.getElementById('nama_dealer').value
+
+            try {
+                const res = await fetch(`/index/dealer/?name=${name}`, {
+                    method: 'GET',
+                });
+
+                switch (res.status) {
+                    default:
+                        alert('server error. Mohon lapor kepada developer untuk pengecekan');
+                        return
+                    case 400:
+                        alert('data invalid, data nama dealer tidak boleh kosong atau invalid karakter')
+                        return
+                    case 404:
+                        alert('dealer tidak ditemukan. Perhatikan penulisan nama dealer.')
+                        return
+                    case 200:
+                        alert('Dealer ditemukan!. Bisa melanjutkan ke tahap berikutnya.')
+                        return
+                }
+            } catch (e) {
+                alert('server error. Mohon lapor kepada developer untuk pengecekan');
+                return
+            }
+        })
+    </script>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<head>
+    <style>
+            body {
+                max-width: 60%;
+                margin: auto;
+            }
+
+            table {
+                font-family: arial, sans-serif;
+                border-collapse: collapse;
+                max-width: 70%;
+                width: 100%;
+                table-layout: fixed;
+            }
+            td, th {
+                border: 1px solid #dddddd;
+                text-align: left;
+                padding: 8px;
+                word-wrap:break-word;
+            }
+
+            tr:nth-child(even) {
+                background-color: #dddddd;
+            }
+        </style>
+</head>
+<html>
+    <label for="id">Masukan ID dari halaman hasil yang akan anda cari</label><br>
+    <input type="text" id="id" name="id">
+    <button id="findBtn">Cari</button>
+    
+    <br><br><br><br><br>
+
+    <div id="root">
+
+    </div>
+</html>
+
+<script>
+    const root = document.getElementById('root')
+    const table = document.createElement('table')
+    table.id = 'roTable'
+    table.style = 'max-width:1000px;'
+    const tr1 = document.createElement('tr')
+
+    const no1 = document.createElement('td')
+    no1.innerText = 'No'
+    
+    const ktp1 = document.createElement('td')
+    ktp1.innerText = 'KTP'
+
+    const pembayaran1 = document.createElement('td')
+    pembayaran1.innerText = "Pembayaran"
+
+    const dealer1 = document.createElement('td')
+    dealer1.innerText = "Dealer"
+
+    const jumlahOrder1 = document.createElement('td')
+    jumlahOrder1.innerText = "Jumlah Order"
+
+    tr1.appendChild(no1)
+    tr1.appendChild(ktp1)
+    tr1.appendChild(dealer1)
+    tr1.appendChild(pembayaran1)
+    tr1.appendChild(jumlahOrder1)
+
+    table.appendChild(tr1)
+    root.appendChild(table)
+
+    const findBtn = document.getElementById('findBtn')
+    findBtn.addEventListener('click', async (e) => {
+        e.preventDefault();
+
+        const id = document.getElementById('id').value;
+        if (!id) {
+            alert('id tidak boleh kosong')
+            return;
+        }
+
+        try {
+            const res = await fetch(`/index/ro/result/${id}`, {
+                method: 'GET',
+            });
+
+            if (res.status === 404) {
+                alert('Data tidak ditemukan. Mungkin ID yang anda masukan salah.')
+                return;
+            }
+
+            if (res.status === 503) {
+                alert('RO checking sedang dalam proses. Mohon menunggu dan cek lagi nanti')
+                return;
+            }
+
+            if (res.status >= 400) {
+                throw new Error('server return unexpected status');
+            }
+
+            const data = await res.json();
+            console.log(data);
+
+            for (let i = 0; i < data.result.length; i++) {
+                const tr = document.createElement('tr')
+
+                const no = document.createElement('td')
+                no.innerText = i + 1
+
+                const ktp = document.createElement('td')
+                ktp.innerText = data.result[i].ktp
+
+                const pembayaran = document.createElement('td')
+                pembayaran.innerText = data.result[i].payments.toString();
+
+                const dealer = document.createElement('td')
+                dealer.innerText = data.result[i].dealer_names.toString();
+
+                const jumlahOrder = document.createElement('td')
+                jumlahOrder.innerText = data.result[i].num_orders.toString();
+
+                tr.appendChild(no)
+                tr.appendChild(ktp)
+                tr.appendChild(dealer)
+                tr.appendChild(pembayaran)
+                tr.appendChild(jumlahOrder)
+
+                table.appendChild(tr)
+            }
+
+        } catch (e) {
+            console.log(e)
+            alert('Aplikasi error silahkan hubungi developer.')
+        }
+    })
+
+</script>
+
+<!--
+    <table id="roTable">
+        <tr>
+            <th>Link</th>
+        </tr>
+    </table> 
+
+     // if (res.status === 404) {
+    //     alert('Maaf, tidak ditemukan data pembeli yang tergolong RO')
+    //     return
+    // }
+
+    // if (res.status === 500) {
+    //     alert('aplikasi error. Segera hubungi developer untuk perbaikan')
+    //     return
+    // }
+
+    // if (res.status === 503) {
+    //     alert('Server terlalu lama meresponse. Mungkin proses terlalu berat. Mohon hubungi developer')
+    //     return
+    // }
+
+    // const data = await res.json()
+    // console.log(data)
+    // if (data.result.length === 0) {
+    //     alert('Server mengembalikan 0 data. Maaf, tidak ditemukan data pembeli yang tergolong RO')
+    //     return
+    // }
+
+    // for (let i = 0; i < data.length; i++) {
+    //     const tr = document.createElement('tr')
+
+    //     const ktp = document.createElement('td')
+    //     ktp.innerText = data[i].ktp
+
+    //     const pembayaran = document.createElement('td')
+    //     pembayaran.innerText = data[i].payments.toString();
+
+    //     const dealer = document.createElement('td')
+    //     dealer.innerText = data[i].dealers.toString();
+
+    //     const jumlahOrder = document.createElement('td')
+    //     jumlahOrder.innerText = data[i].num_orders.toString();
+
+    //     tr.appendChild(ktp)
+    //     tr.appendChild(dealer)
+    //     tr.appendChild(pembayaran)
+    //     tr.appendChild(jumlahOrder)
+
+    //     table.appendChild(tr)
+    // }
+-->

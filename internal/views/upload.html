@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            div {
+                max-width: 30%;
+                margin: auto;
+            }
+        </style>
+    </head>
+<body>
+
+<div>
+    <p>Silahkan pilih file yang akan anda upload. Pastikan file memiliki format CSV dan sesuai dengan format yang ditentukan</p>
+    <p>Mohon pahami bahwa proses mungkin membutuhkan waktu lama. Mohon tunggu hingga proses selesai.</p>
+    <form method="post" enctype="multipart/form-data">
+        <!-- upload of a single file -->
+        <p>
+            <label>Add file (single): </label><br/>
+            <input id="file" type="file" name="file" accept="text/csv"/>
+        </p>
+        <p>
+            <input id="submit" type="submit"/>
+        </p>
+    </form>
+</div>
+</body>
+
+    <script>
+        const submitBtn = document.getElementById("submit");
+        submitBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            
+            submitBtn.disabled = true;
+
+            const file = document.getElementById("file").files[0];
+
+            const form = new FormData()
+            form.append("file", file)
+
+            try {
+                const res = await fetch('/index/upload/', {
+                    method: 'POST',
+                    body: form,
+                });
+
+                if (res.status >= 500) {
+                    alert('Maaf, aplikasi bermasalah. Mohon hubungi developer untuk diperbaiki.')
+                    return;
+                }
+
+                if (res.status !== 200) {
+                    alert('Perhatian, server mengembalikan error. Perhatikan file yang anda upload. Pastikan berbentuk CSV dan memiliki struktur yang benar.')
+                    return
+                }
+
+                alert('Proses selesai. Data sudah masuk ke database.')
+            } catch (e) {
+                alert('Maaf, aplikasi bermasalah. Mohon hubungi developer untuk diperbaiki.')
+            }
+        })
+    </script>
+</html>
