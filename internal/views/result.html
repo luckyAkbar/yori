@@ -118,11 +118,15 @@
                 const jumlahOrder = document.createElement('td')
                 jumlahOrder.innerText = data.result[i].num_orders.toString();
 
+                const tahun = document.createElement('td')
+                tahun.innerText = data.result[i].tahun.toString();
+
                 tr.appendChild(no)
                 tr.appendChild(ktp)
                 tr.appendChild(dealer)
                 tr.appendChild(pembayaran)
                 tr.appendChild(jumlahOrder)
+                tr.appendChild(tahun)
 
                 table.appendChild(tr)
             }
