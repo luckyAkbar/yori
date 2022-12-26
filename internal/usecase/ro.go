@@ -150,6 +150,7 @@ func (u *roUsecase) checkRO(baseRO model.Record, comparator []model.Record) (mod
 		if rec.Ktp == baseRO.Ktp {
 			result.AddPayment(rec.GetPaymentType())
 			result.AddDealer(rec.Dealer)
+			result.AddTahun(rec.TglMohonFaktur)
 		}
 	}
 
