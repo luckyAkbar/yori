@@ -19,7 +19,6 @@ require (
 	github.com/cockroachdb/apd v1.1.0 // indirect
 	github.com/getsentry/sentry-go v0.11.0 // indirect
 	github.com/go-gorp/gorp/v3 v3.0.2 // indirect
-	github.com/gocarina/gocsv v0.0.0-20221105105431-c8ef78125b99 // indirect
 	github.com/goodsign/monday v1.0.0 // indirect
 	github.com/gorilla/css v1.0.0 // indirect
 	github.com/graph-gophers/graphql-go v1.4.0 // indirect

@@ -14,11 +14,11 @@ type AdvanceROCheckingInput struct {
 }
 
 type AdvanceROCheckingResult struct {
-	KTP         string    `json:"ktp"`
-	Payments    []string  `json:"payments"`
-	DealerNames []string  `json:"dealer_names"`
-	Tahun       time.Time `json:"tahun"`
-	NumOrders   int       `json:"num_orders"`
+	KTP         string      `json:"ktp"`
+	Payments    []string    `json:"payments"`
+	DealerNames []string    `json:"dealer_names"`
+	Tahun       []time.Time `json:"tahun"`
+	NumOrders   int         `json:"num_orders"`
 }
 
 func (arocr *AdvanceROCheckingResult) AddPayment(s string) {
@@ -26,7 +26,7 @@ func (arocr *AdvanceROCheckingResult) AddPayment(s string) {
 }
 
 func (arocr *AdvanceROCheckingResult) AddTahun(t time.Time) {
-	arocr.Tahun = t
+	arocr.Tahun = append(arocr.Tahun, t)
 }
 
 func (arocr *AdvanceROCheckingResult) AddDealer(s string) {
