@@ -2,6 +2,7 @@ package model
 
 import (
 	"context"
+	"fmt"
 	"time"
 )
 
@@ -14,19 +15,19 @@ type AdvanceROCheckingInput struct {
 }
 
 type AdvanceROCheckingResult struct {
-	KTP         string      `json:"ktp"`
-	Payments    []string    `json:"payments"`
-	DealerNames []string    `json:"dealer_names"`
-	Tahun       []time.Time `json:"tahun"`
-	NumOrders   int         `json:"num_orders"`
+	KTP         string   `json:"ktp"`
+	Payments    []string `json:"payments"`
+	DealerNames []string `json:"dealer_names"`
+	Tahun       []string `json:"tahun"`
+	NumOrders   int      `json:"num_orders"`
 }
 
 func (arocr *AdvanceROCheckingResult) AddPayment(s string) {
 	arocr.Payments = append(arocr.Payments, s)
 }
 
-func (arocr *AdvanceROCheckingResult) AddTahun(t time.Time) {
-	arocr.Tahun = append(arocr.Tahun, t)
+func (arocr *AdvanceROCheckingResult) AddTahun(t int) {
+	arocr.Tahun = append(arocr.Tahun, fmt.Sprintf("%d", t))
 }
 
 func (arocr *AdvanceROCheckingResult) AddDealer(s string) {
